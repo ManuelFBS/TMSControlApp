@@ -79,25 +79,25 @@ export class PrismaEmployeeRepository implements EmployeeRepository {
 
         /**
          *
-         * @param nombres - Nombres a buscar (uno o ambos, puede ser parcial)...
-         * @param apellidos - Apellidos a buscar (uno o ambos, puede ser parcial)...
+         * @param names - Nombres a buscar (uno o ambos, puede ser parcial)...
+         * @param lastNames - Apellidos a buscar (uno o ambos, puede ser parcial)...
          * @returns - Retorna el(los) empleado(s) encontrado(s)...
          */
-        async findByNombreOApellido(
-                nombres: string,
-                apellidos: string,
+        async findByNameOrLastname(
+                names: string,
+                lastNames: string,
         ): Promise<Employee[]> {
                 //* Se construyen condiciones de búsqueda dinámicamente...
                 const whereConditions: any = [];
 
-                //* Si se proporcionan nombres, buscar en el campo nombres...
-                if (nombres && nombres.trim()) {
-                        const normalizedNombres = this.normalizeText(nombres);
-                        const nombreWords = this.splitIntoWords(nombres);
+                //* Si se proporcionan names, buscar en el campo names...
+                if (names && names.trim()) {
+                        const normalizedNombres = this.normalizeText(names);
+                        const nombreWords = this.splitIntoWords(names);
 
                         //* Búsqueda exacta normalizada...
                         whereConditions.push({
-                                nombres: {
+                                names: {
                                         contains: normalizedNombres,
                                         mode: 'insensitive',
                                 },
@@ -107,7 +107,7 @@ export class PrismaEmployeeRepository implements EmployeeRepository {
                         if (nombreWords.length > 1) {
                                 const wordConditions = nombreWords.map(
                                         (word) => ({
-                                                nombres: {
+                                                names: {
                                                         contains: word,
                                                         mode: 'insensitive',
                                                 },
@@ -120,15 +120,15 @@ export class PrismaEmployeeRepository implements EmployeeRepository {
                         }
                 }
 
-                //* Si se proporcionan apellidos, buscar en el campo apellidos...
-                if (apellidos && apellidos.trim()) {
+                //* Si se proporcionan lastNames, buscar en el campo lastNames...
+                if (lastNames && lastNames.trim()) {
                         const normalizedApellidos =
-                                this.normalizeText(apellidos);
-                        const apellidoWords = this.splitIntoWords(apellidos);
+                                this.normalizeText(lastNames);
+                        const apellidoWords = this.splitIntoWords(lastNames);
 
                         //* Búsqueda exacta normalizada...
                         whereConditions.push({
-                                apellidos: {
+                                lastNames: {
                                         contains: normalizedApellidos,
                                         mode: 'insensitive',
                                 },
@@ -138,7 +138,7 @@ export class PrismaEmployeeRepository implements EmployeeRepository {
                         if (apellidoWords.length > 1) {
                                 const wordConditions = apellidoWords.map(
                                         (word) => ({
-                                                apellidos: {
+                                                lastNames: {
                                                         contains: word,
                                                         mode: 'insensitive',
                                                 },
@@ -253,7 +253,7 @@ export class PrismaEmployeeRepository implements EmployeeRepository {
                         const nombreWords = this.splitIntoWords(lastNames);
 
                         whereConditions.push({
-                                nombres: {
+                                names: {
                                         contains: normalizedNombres,
                                         mode: 'insensitive',
                                 },
@@ -262,7 +262,7 @@ export class PrismaEmployeeRepository implements EmployeeRepository {
                         if (nombreWords.length > 1) {
                                 const wordConditions = nombreWords.map(
                                         (word) => ({
-                                                nombres: {
+                                                names: {
                                                         contains: word,
                                                         mode: 'insensitive',
                                                 },
@@ -280,7 +280,7 @@ export class PrismaEmployeeRepository implements EmployeeRepository {
                         const apellidoWords = this.splitIntoWords(lastNames);
 
                         whereConditions.push({
-                                apellidos: {
+                                lastNames: {
                                         contains: normalizedApellidos,
                                         mode: 'insensitive',
                                 },
@@ -289,7 +289,7 @@ export class PrismaEmployeeRepository implements EmployeeRepository {
                         if (apellidoWords.length > 1) {
                                 const wordConditions = apellidoWords.map(
                                         (word) => ({
-                                                apellidos: {
+                                                lastNames: {
                                                         contains: word,
                                                         mode: 'insensitive',
                                                 },

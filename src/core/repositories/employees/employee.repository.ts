@@ -9,7 +9,7 @@ export abstract class EmployeeRepository {
         abstract findAll(): Promise<Employee[]>;
         abstract findByID(id: number): Promise<Employee | null>;
         abstract findByDNI(dni: string): Promise<Employee | null>;
-        abstract findByNombreOApellido(
+        abstract findByNameOrLastname(
                 names: string,
                 lastNames: string,
         ): Promise<Employee[]>;
