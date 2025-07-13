@@ -21,6 +21,24 @@ model Employee {
   lastNames                           String                           @db.VarChar(100)
   phone                                  String                           @db.VarChar(25)
   address                                String                           @db.VarChar(240)
+  user                                      User?
   createdAt                            DateTime                    @default(now())
   updatedAt                           DateTime                    @updatedAt
+}
+
+model User {
+  id                                           Int                                @id @default(autoincrement())
+  dni                                        String                           @unique @db.VarChar(20)
+  username                            String                           @db.VarChar(15)
+  password                             String                           @db.VarChar(20)
+  role                                       Role                              @default(Employee)
+  employee                            Employee                    @relation(fields: [dni], references: [dni], onDelete: Cascade, onUpdate: Cascade)
+  createdAt                            DateTime                     @default(now())
+  updatedAt                           DateTime                    @updatedAt
+}
+
+enum Role {
+  Owner
+  Admin
+  Employee
 }
