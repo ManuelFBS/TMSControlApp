@@ -13,3 +13,14 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Employee {
+  id                                           Int                                @id @default(autoincrement())
+  dni                                        String                           @unique @db.VarChar(20)
+  names                                  String                           @db.VarChar(100)
+  lastNames                           String                           @db.VarChar(100)
+  phone                                  String                           @db.VarChar(25)
+  address                                String                           @db.VarChar(240)
+  createdAt                            DateTime                    @default(now())
+  updatedAt                           DateTime                    @updatedAt
+}
