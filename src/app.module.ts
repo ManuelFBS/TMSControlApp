@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RedisModule } from './shared/redis/redis.module';
 import { EmployeeModule } from './modules/employees/employee.module';
 // import { AuthModule } from './modules/auth/auth.module';
-// import { UserModule } from './modules/users/user.module';
+import { UserModule } from './modules/users/user.module';
 // import { UserSessionModule } from './modules/usersessions/user-session.module';
 
 @Module({
@@ -37,7 +37,7 @@ import { EmployeeModule } from './modules/employees/employee.module';
                         }),
                 }),
                 // AuthModule,
-                // UserModule,
+                UserModule,
                 EmployeeModule,
                 // UserSessionModule,
         ],
