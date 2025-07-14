@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RedisModule } from './shared/redis/redis.module';
 import { EmployeeModule } from './modules/employees/employee.module';
-// import { AuthModule } from './modules/auth/auth.module';
+import { AuthModule } from './modules/auth/token/auth.module';
 import { UserModule } from './modules/users/user.module';
 import { UserSessionModule } from './modules/users-sessions/user-session.module';
 
@@ -36,7 +36,7 @@ import { UserSessionModule } from './modules/users-sessions/user-session.module'
                                         ) || '',
                         }),
                 }),
-                // AuthModule,
+                AuthModule,
                 UserModule,
                 EmployeeModule,
                 UserSessionModule,
