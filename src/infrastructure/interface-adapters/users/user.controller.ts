@@ -16,9 +16,9 @@ import {
         UserResponseDTO,
         UserPublicResponseDTO,
 } from '../../../application/dto/users/create-user.dto';
-// import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Permissions } from '../../../core/permissions/permissions.decorator';
-// import { PermissionsGuard } from '../../../../auth/guards/permissions.guard';
+import { PermissionsGuard } from '../../../auth/guards/permissions.guard';
 import { plainToInstance } from 'class-transformer';
 
 @Controller('api/users')
@@ -26,8 +26,8 @@ export class UserController {
         constructor(private readonly userService: UserService) {}
 
         @Post('user/new')
-        // @UseGuards(JWTAuthGuard, PermissionsGuard)
-        // @Permissions('user:create')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('user:create')
         async create(
                 @Body() createUserDTO: CreateUserDTO,
         ): Promise<UserResponseDTO> {
@@ -37,8 +37,8 @@ export class UserController {
         }
 
         @Get()
-        // @UseGuards(JWTAuthGuard, PermissionsGuard)
-        // @Permissions('user:read')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('user:read')
         async findAll(): Promise<UserPublicResponseDTO[]> {
                 const users = await this.userService.findAllUsers();
 
@@ -56,8 +56,8 @@ export class UserController {
         }
 
         @Get('user_byid/:id')
-        // @UseGuards(JWTAuthGuard, PermissionsGuard)
-        // @Permissions('user:read')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('user:read')
         async findOne(
                 @Param('id', ParseIntPipe) id: number,
         ): Promise<UserResponseDTO> {
@@ -67,8 +67,8 @@ export class UserController {
         }
 
         @Get('user_bydni/:dni')
-        // @UseGuards(JWTAuthGuard, PermissionsGuard)
-        // @Permissions('user:read')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('user:read')
         async findByDni(@Param('dni') dni: string): Promise<UserResponseDTO> {
                 const user = await this.userService.findUserByDNI(dni);
 
@@ -76,8 +76,8 @@ export class UserController {
         }
 
         @Put('user_update/:id')
-        // @UseGuards(JWTAuthGuard, PermissionsGuard)
-        // @Permissions('user:update')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('user:update')
         async update(
                 @Param('id', ParseIntPipe) id: number,
                 @Body() updateUserDto: UpdateUserDTO,
@@ -91,8 +91,8 @@ export class UserController {
         }
 
         @Delete('user_del/:id')
-        // @UseGuards(JWTAuthGuard, PermissionsGuard)
-        // @Permissions('user:update')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('user:update')
         async remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
                 await this.userService.deleteUser(id);
         }
