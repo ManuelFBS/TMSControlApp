@@ -236,7 +236,7 @@ export class PrismaEmployeeRepository implements EmployeeRepository {
          * @param {number} limit - Cantidad de resultados por página.
          * @returns {Promise<{ employees: Employee[]; total: number }>} Empleados encontrados y el total.
          */
-        async findByNombreOApellidoWithPagination(
+        async findByNamesOrLastnamesWithPagination(
                 names: string,
                 lastNames: string,
                 page: number = 1,
