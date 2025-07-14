@@ -23,7 +23,7 @@ export abstract class EmployeeRepository {
         ): Promise<Employee>;
         abstract delete(id: number): Promise<void>;
         abstract existsWithDNI(dni: string): Promise<boolean>;
-        abstract findByNombreOApellidoWithPagination(
+        abstract findByNamesOrLastnamesWithPagination(
                 names: string,
                 lastNames: string,
                 page: number,
