@@ -1,4 +1,4 @@
-import { UserSession } from '../../../core/entities/users-sessions/user-session.entity';
+import { UserSession } from '../../entities/users-sessions/user-session.entity';
 
 export abstract class UserSessionRepository {
         abstract create(user: UserSession): Promise<UserSession>;
