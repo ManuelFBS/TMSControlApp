@@ -4,7 +4,7 @@ import { RedisModule } from './shared/redis/redis.module';
 import { EmployeeModule } from './modules/employees/employee.module';
 // import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/users/user.module';
-// import { UserSessionModule } from './modules/usersessions/user-session.module';
+import { UserSessionModule } from './modules/users-sessions/user-session.module';
 
 @Module({
         imports: [
@@ -39,7 +39,7 @@ import { UserModule } from './modules/users/user.module';
                 // AuthModule,
                 UserModule,
                 EmployeeModule,
-                // UserSessionModule,
+                UserSessionModule,
         ],
         //? No se necesitan controllers ni providers aquí si ya están en los módulos...
 })
