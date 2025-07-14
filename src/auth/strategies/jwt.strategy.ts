@@ -32,7 +32,7 @@ export class JWTStrategy extends PassportStrategy(Strategy) {
                         throw new ForbiddenException('Token not provided...');
                 }
 
-                if (await this.tokenBlacklist.isBlacklisted(token)) {
+                if (await this.tokenBlacklist.isTokenBlacklisted(token)) {
                         throw new UnauthorizedException('Token revoked...');
                 }
 
