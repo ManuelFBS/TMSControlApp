@@ -11,12 +11,12 @@ import {
 import { UserSessionService } from '../../../application/use-cases/users-sessions/user-session.service';
 import { CreateUserSessionDTO } from '../../../application/dto/users-sessions/create-user-session.dto';
 import { UpdateUserSessionDTO } from '../../../application/dto/users-sessions/update-user-session.dto';
-// import { JWTAuthGuard } from '../../../../auth/guards/jwt-auth.guard';
-// import { PermissionsGuard } from '../../../../auth/guards/permissions.guard';
+import { JWTAuthGuard } from '../../../auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from '../../../auth/guards/permissions.guard';
 import { Permissions } from '../../../core/permissions/permissions.decorator';
 
 @Controller('user-sessions')
-// @UseGuards(JWTAuthGuard, PermissionsGuard)
+@UseGuards(JWTAuthGuard, PermissionsGuard)
 export class UserSessionController {
         constructor(private readonly userSessionService: UserSessionService) {}
 
