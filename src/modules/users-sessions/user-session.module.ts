@@ -15,5 +15,6 @@ import { PrismaModule } from '../../infrastructure/database/prisma/prisma.module
                         useClass: PrismaUserSessionRepository,
                 },
         ],
+        exports: [UserSessionService, UserSessionRepository],
 })
 export class UserSessionModule {}
