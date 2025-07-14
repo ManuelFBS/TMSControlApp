@@ -35,10 +35,25 @@ model User {
   employee                            Employee                    @relation(fields: [dni], references: [dni], onDelete: Cascade, onUpdate: Cascade)
   createdAt                            DateTime                     @default(now())
   updatedAt                           DateTime                    @updatedAt
+  sessions                               UserSession[] // <-- Este campo es el lado opuesto a la relación...
 }
 
 enum Role {
   Owner
   Admin
   Employee
+}
+
+model UserSession {
+  id                                           Int                                 @id @default(autoincrement())
+  dni                                         String
+  username                             String
+  role                                        String
+  initDate                                DateTime
+  initHour                                String
+  finalDate                              DateTime?
+  finalHour                              String?
+  user                                       User                              @relation(fields: [dni], references: [dni])
+
+  @@index([dni])
 }
