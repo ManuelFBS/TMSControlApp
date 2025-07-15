@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../users/user.service';
@@ -87,9 +90,6 @@ export class AuthService {
                                         'Error ending user session:',
                                         error,
                                 );
-                                //! throw new UnauthorizedException(
-                                //!         'Error ending session...',
-                                //! );
                         }
                 }
 

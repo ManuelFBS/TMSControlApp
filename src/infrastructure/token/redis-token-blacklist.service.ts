@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { TokenBlacklist } from '../../core/interfaces/token/token-blacklist.interface';
 import { RedisService } from '../../shared/redis/redis.service';
 import * as jwt from 'jsonwebtoken';
 
+@Injectable()
 export class RedisTokenBlacklistService implements TokenBlacklist {
         private readonly prefix: string;
 
@@ -16,6 +18,8 @@ export class RedisTokenBlacklistService implements TokenBlacklist {
         }
 
         async addToBlacklist(token: string): Promise<void> {
+                console.log('Agregando a blacklist:', token);
+
                 try {
                         const decoded = jwt.decode(token) as { exp?: number };
 
@@ -44,6 +48,7 @@ export class RedisTokenBlacklistService implements TokenBlacklist {
         }
 
         async isBlacklisted(token: string): Promise<boolean> {
+                console.log('Consultando blacklist:', token);
                 try {
                         const result = await this.redis.exists(
                                 this.getKey(token),
