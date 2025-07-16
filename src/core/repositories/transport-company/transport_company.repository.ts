@@ -2,7 +2,7 @@ import { TransportCompany } from '../../entities/transport-company/transport_com
 
 export abstract class TransportCompanyRepository {
         abstract create(company: TransportCompany): Promise<TransportCompany>;
-        abstract findAll(): Promise<TransportCompany>;
+        abstract findAll(): Promise<TransportCompany[]>;
         abstract findByID(id: number): Promise<TransportCompany | null>;
         abstract findByIDCompany(
                 idCompany: string,
