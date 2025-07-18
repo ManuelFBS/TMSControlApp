@@ -18,8 +18,6 @@ export class RedisTokenBlacklistService implements TokenBlacklist {
         }
 
         async addToBlacklist(token: string): Promise<void> {
-                console.log('Agregando a blacklist:', token);
-
                 try {
                         const decoded = jwt.decode(token) as { exp?: number };
 
@@ -48,7 +46,6 @@ export class RedisTokenBlacklistService implements TokenBlacklist {
         }
 
         async isBlacklisted(token: string): Promise<boolean> {
-                console.log('Consultando blacklist:', token);
                 try {
                         const result = await this.redis.exists(
                                 this.getKey(token),
