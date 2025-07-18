@@ -7,6 +7,9 @@ export abstract class TransportCompanyRepository {
         abstract findByIDCompany(
                 idCompany: string,
         ): Promise<TransportCompany | null>;
+        abstract findByCompanyName(
+                companyName: string,
+        ): Promise<TransportCompany | null>;
         abstract update(
                 id: number,
                 company: Partial<TransportCompany>,
