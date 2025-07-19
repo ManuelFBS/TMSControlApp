@@ -61,4 +61,79 @@ export class TransportCompanyService {
         async findAllCompanies(): Promise<TransportCompany[]> {
                 return this.transportCompanyRepository.findAll();
         }
+
+        async findCompanyByID(id: number): Promise<TransportCompany> {
+                const company =
+                        await this.transportCompanyRepository.findByID(id);
+                if (!company) {
+                        throw new NotFoundException(
+                                `La Compañía con ID ${id} no se encuentra.`,
+                        );
+                }
+
+                return company;
+        }
+
+        async findComapnyByIDComp(
+                idCompany: string,
+        ): Promise<TransportCompany> {
+                const company =
+                        await this.transportCompanyRepository.findByIDCompany(
+                                idCompany,
+                        );
+                if (!company) {
+                        throw new NotFoundException(
+                                `La Compañía con ID de Compañía ${idCompany} no se encuentra.`,
+                        );
+                }
+
+                return company;
+        }
+
+        async findCompanyByName(
+                companyName: string,
+        ): Promise<TransportCompany> {
+                const company =
+                        await this.transportCompanyRepository.findByCompanyName(
+                                companyName,
+                        );
+                if (!company) {
+                        throw new NotFoundException(
+                                `La Compañía con el nombre ${companyName} no se encuentra.`,
+                        );
+                }
+
+                return company;
+        }
+
+        async updateCompany(
+                id: number,
+                updateTransportCompanyDTO: UpdateTransportCompanyDTO,
+        ): Promise<TransportCompany> {
+                //* Verificar existencia de la Compañía...
+                if (await this.findCompanyByID(id)) {
+                        throw new NotFoundException(
+                                `La Compañía con la ID ${id} no encontrada.`,
+                        );
+                }
+
+                const updatedCompany =
+                        await this.transportCompanyRepository.update(
+                                id,
+                                updateTransportCompanyDTO,
+                        );
+
+                return updatedCompany;
+        }
+
+        async deleteCompany(id: number): Promise<void> {
+                //* Verificar existencia de la Compañía...
+                if (await this.findCompanyByID(id)) {
+                        throw new NotFoundException(
+                                `La Compañía con la ID ${id} no encontrada.`,
+                        );
+                }
+
+                await this.transportCompanyRepository.delete(id);
+        }
 }
