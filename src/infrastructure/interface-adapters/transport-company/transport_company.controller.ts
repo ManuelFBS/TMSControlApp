@@ -99,4 +99,32 @@ export class TransportCompanyController {
                         searchCompanyDTO,
                 );
         }
+
+        @Put('update_comp/:id')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('company:create', 'company:update')
+        async updateCompanyByID(
+                @Param('id', ParseIntPipe) id: number,
+                @Body() updateTransportCompanyDTO: UpdateTransportCompanyDTO,
+        ): Promise<TransportCompanyResponseDTO> {
+                const updatedCompany =
+                        await this.transportCompanyService.updateCompany(
+                                id,
+                                updateTransportCompanyDTO,
+                        );
+
+                return plainToInstance(
+                        TransportCompanyResponseDTO,
+                        updatedCompany,
+                );
+        }
+
+        @Delete('delete_byid/:id')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('employee:create', 'employee:read', 'employee:delete')
+        async removeCompany(
+                @Param('id', ParseIntPipe) id: number,
+        ): Promise<void> {
+                await this.transportCompanyService.deleteCompany(id);
+        }
 }
