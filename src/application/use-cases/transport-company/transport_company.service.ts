@@ -1,17 +1,17 @@
 import {
         Injectable,
         Inject,
-        BadRequestException,
         ConflictException,
-        InternalServerErrorException,
         NotFoundException,
+        BadRequestException,
 } from '@nestjs/common';
 import { TransportCompany } from '../../../core/entities/transport-company/transport_company.entity';
 import { TransportCompanyRepository } from '../../../core/repositories/transport-company/transport_company.repository';
 import {
         CreateTransportCompanyDTO,
         UpdateTransportCompanyDTO,
-} from 'src/application/dto/transport-company/create-transport_company.dto';
+} from '../../dto/transport-company/create-transport_company.dto';
+import { SearchCompanyDTO } from '../../dto/transport-company/search-company.dto';
 
 @Injectable()
 export class TransportCompanyService {
@@ -90,15 +90,22 @@ export class TransportCompanyService {
         }
 
         async findCompanyByName(
-                companyName: string,
+                searchCompanyDTO: SearchCompanyDTO,
         ): Promise<TransportCompany> {
+                if (!searchCompanyDTO.companyName) {
+                        throw new BadRequestException(
+                                'El nombre de la compañía es requerido.',
+                        );
+                }
+
                 const company =
                         await this.transportCompanyRepository.findByCompanyName(
-                                companyName,
+                                searchCompanyDTO.companyName,
                         );
+
                 if (!company) {
                         throw new NotFoundException(
-                                `La Compañía con el nombre ${companyName} no se encuentra.`,
+                                `La Compañía con el nombre ${searchCompanyDTO.companyName} no se encuentra.`,
                         );
                 }
 
