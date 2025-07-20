@@ -11,7 +11,15 @@ export type Permission =
         | 'user:delete'
         | 'auth:login'
         | 'auth:logout'
-        | 'sessions:read';
+        | 'sessions:read'
+        | 'company:create'
+        | 'company:read'
+        | 'company:update'
+        | 'company:delete'
+        | 'driver:create'
+        | 'driver:read'
+        | 'driver:update'
+        | 'driver:delete';
 
 export const RolePermissions: Record<UserRole, Permission[]> = {
         [UserRole.OWNER]: [
@@ -26,6 +34,14 @@ export const RolePermissions: Record<UserRole, Permission[]> = {
                 'auth:login',
                 'auth:logout',
                 'sessions:read',
+                'company:create',
+                'company:read',
+                'company:update',
+                'company:delete',
+                'driver:create',
+                'driver:read',
+                'driver:update',
+                'driver:delete',
         ],
         [UserRole.ADMIN]: [
                 'employee:create',
@@ -37,6 +53,12 @@ export const RolePermissions: Record<UserRole, Permission[]> = {
                 'auth:login',
                 'auth:logout',
                 'sessions:read',
+                'company:create',
+                'company:read',
+                'company:update',
+                'driver:create',
+                'driver:read',
+                'driver:update',
         ],
         [UserRole.EMPLOYEE]: [
                 'employee:read',
@@ -44,6 +66,8 @@ export const RolePermissions: Record<UserRole, Permission[]> = {
                 'auth:login',
                 'auth:logout',
                 'sessions:read',
+                'company:read',
+                'driver:read',
         ],
 };
 

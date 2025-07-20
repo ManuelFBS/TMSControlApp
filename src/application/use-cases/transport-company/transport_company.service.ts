@@ -11,7 +11,6 @@ import { TransportCompanyRepository } from '../../../core/repositories/transport
 import {
         CreateTransportCompanyDTO,
         UpdateTransportCompanyDTO,
-        TransportCompanyResponseDTO,
 } from 'src/application/dto/transport-company/create-transport_company.dto';
 
 @Injectable()
