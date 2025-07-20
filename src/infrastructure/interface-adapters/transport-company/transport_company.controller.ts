@@ -14,12 +14,12 @@ import {
         CreateTransportCompanyDTO,
         TransportCompanyResponseDTO,
         UpdateTransportCompanyDTO,
-} from 'src/application/dto/transport-company/create-transport_company.dto';
+} from '../../../application/dto/transport-company/create-transport_company.dto';
+import { SearchCompanyDTO } from '../../../application/dto/transport-company/search-company.dto';
 import { JWTAuthGuard } from '../../../auth/guards/jwt-auth.guard';
 import { Permissions } from '../../../core/permissions/permissions.decorator';
 import { PermissionsGuard } from '../../../auth/guards/permissions.guard';
 import { plainToInstance } from 'class-transformer';
-import { compareSync } from 'bcrypt';
 
 @Controller('api/company')
 export class TransportCompanyController {
@@ -93,10 +93,10 @@ export class TransportCompanyController {
         @UseGuards(JWTAuthGuard, PermissionsGuard)
         @Permissions('company:read')
         async findOneByCompanyName(
-                @Param('companyName') companyName: string,
+                @Body() searchCompanyDTO: SearchCompanyDTO,
         ): Promise<TransportCompanyResponseDTO> {
                 return await this.transportCompanyService.findCompanyByName(
-                        companyName,
+                        searchCompanyDTO,
                 );
         }
 }
