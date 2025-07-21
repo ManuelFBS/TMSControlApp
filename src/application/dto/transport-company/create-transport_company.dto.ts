@@ -20,7 +20,7 @@ export class CreateTransportCompanyDTO {
         @MinLength(6)
         @MaxLength(30)
         @Matches(/^[A-Za-z0-9]+$/, {
-                message: 'El DNI solo debe contener letras y/o números (sin espacios ni caracteres especiales)',
+                message: 'El ID Compañía solo debe contener letras y/o números (sin espacios ni caracteres especiales)',
         })
         idCompany: string;
 
