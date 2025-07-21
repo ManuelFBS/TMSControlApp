@@ -11,7 +11,7 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
 export class CreateTransportCompanyDTO {
         @ApiProperty({
                 example: ['ABC123', '123567', 'ABCFGH'],
-                description: 'El ID de Empresa es únkico',
+                description: 'El ID de Empresa es único',
                 minLength: 5,
                 maxLength: 30,
         })
