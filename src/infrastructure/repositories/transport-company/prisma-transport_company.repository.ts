@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
-import { TransportCompany } from 'src/core/entities/transport-company/transport_company.entity';
-import { TransportCompanyRepository } from 'src/core/repositories/transport-company/transport_company.repository';
+import { TransportCompany } from '../../../core/entities/transport-company/transport_company.entity';
+import { TransportCompanyRepository } from '../../../core/repositories/transport-company/transport_company.repository';
 
 @Injectable()
 export class PrismaTransportCompanyRepositorty
@@ -55,6 +55,17 @@ export class PrismaTransportCompanyRepositorty
                 const company = await this.prisma.transportCompany.findUnique({
                         where: { idCompany },
                 });
+                return company ? this.toDomain(company) : null;
+        }
+
+        async findByCompanyName(
+                companyName: string,
+        ): Promise<TransportCompany | null> {
+                const company =
+                        await this.prisma.transportCompany.findFirstOrThrow({
+                                where: { companyName },
+                        });
+
                 return company ? this.toDomain(company) : null;
         }
 
