@@ -134,7 +134,7 @@ export class TransportCompanyService {
 
         async deleteCompany(id: number): Promise<void> {
                 //* Verificar existencia de la Compañía...
-                if (await this.findCompanyByID(id)) {
+                if (!(await this.findCompanyByID(id))) {
                         throw new NotFoundException(
                                 `La Compañía con la ID ${id} no encontrada.`,
                         );
