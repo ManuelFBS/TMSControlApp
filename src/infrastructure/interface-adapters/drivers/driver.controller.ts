@@ -34,4 +34,22 @@ export class DriverController {
 
                 return plainToInstance(DriverResponseDTO, driver);
         }
+
+        @Get()
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('driver:read')
+        async findAll(): Promise<DriverResponseDTO[]> {
+                const drivers = await this.driverService.findAllDrivers();
+
+                //* Se ordena por DNI...
+                drivers.sort((a, b) => Number(a) - Number(b));
+
+                return drivers.map((driver) =>
+                        plainToInstance(DriverResponseDTO, {
+                                dni: driver.dni,
+                                driverLicense: driver.driverLicense,
+                                idCompany: driver.idCompany,
+                        }),
+                );
+        }
 }
