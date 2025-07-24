@@ -40,9 +40,10 @@ model User {
 }
 
 enum Role {
-  Owner
-  Admin
-  Employee
+  Administrador
+  Cliente
+  Conductor
+  Empresa
 }
 
 model UserSession {

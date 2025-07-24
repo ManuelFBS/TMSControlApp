@@ -19,10 +19,14 @@ export type Permission =
         | 'driver:create'
         | 'driver:read'
         | 'driver:update'
-        | 'driver:delete';
+        | 'driver:delete'
+        | 'client:create'
+        | 'client:read'
+        | 'client:update'
+        | 'client:delete';
 
 export const RolePermissions: Record<UserRole, Permission[]> = {
-        [UserRole.OWNER]: [
+        [UserRole.ADMIN]: [
                 'employee:create',
                 'employee:read',
                 'employee:update',
@@ -42,33 +46,14 @@ export const RolePermissions: Record<UserRole, Permission[]> = {
                 'driver:read',
                 'driver:update',
                 'driver:delete',
+                'client:create',
+                'client:read',
+                'client:update',
+                'client:delete',
         ],
-        [UserRole.ADMIN]: [
-                'employee:create',
-                'employee:read',
-                'employee:update',
-                'user:create',
-                'user:read',
-                'user:update',
-                'auth:login',
-                'auth:logout',
-                'sessions:read',
-                'company:create',
-                'company:read',
-                'company:update',
-                'driver:create',
-                'driver:read',
-                'driver:update',
-        ],
-        [UserRole.EMPLOYEE]: [
-                'employee:read',
-                'user:read',
-                'auth:login',
-                'auth:logout',
-                'sessions:read',
-                'company:read',
-                'driver:read',
-        ],
+        [UserRole.CLIENT]: ['client:read'],
+        [UserRole.DRIVER]: ['driver:read'],
+        [UserRole.COMPANY]: ['company:read'],
 };
 
 export function hasPermission(role: UserRole, permission: Permission): boolean {
