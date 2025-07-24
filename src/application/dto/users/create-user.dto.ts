@@ -69,7 +69,7 @@ export class CreateUserDTO {
 
         @ApiProperty({
                 enum: UserRole,
-                example: UserRole.EMPLOYEE,
+                example: UserRole.DRIVER,
                 description: 'Rol del usuario en el sistema',
         })
         @IsNotEmpty()
@@ -106,7 +106,7 @@ export class UpdateUserDTO extends PartialType(CreateUserDTO) {
         @ApiProperty({
                 required: false,
                 enum: UserRole,
-                example: UserRole.ADMIN,
+                example: UserRole.DRIVER,
         })
         @IsOptional()
         @Validate(IsValidRoleConstraint)
@@ -123,7 +123,7 @@ export class UserResponseDTO {
         @ApiProperty({ example: 'johndoe', description: 'Nombre de usuario' })
         username: string;
 
-        @ApiProperty({ enum: UserRole, example: UserRole.EMPLOYEE })
+        @ApiProperty({ enum: UserRole, example: UserRole.DRIVER })
         role: UserRole;
 
         @ApiProperty({
@@ -148,6 +148,6 @@ export class UserPublicResponseDTO {
         @ApiProperty({ example: 'johndoe', description: 'Nombre de usuario' })
         username: string;
 
-        @ApiProperty({ enum: UserRole, example: UserRole.EMPLOYEE })
+        @ApiProperty({ enum: UserRole, example: UserRole.DRIVER })
         role: UserRole;
 }
