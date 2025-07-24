@@ -17,6 +17,7 @@ import {
         PaginatedEmployeeResponse,
 } from '../../../application/dto/employees/search-employee.dto';
 
+@Injectable()
 export class EmployeeService {
         constructor(
                 @Inject('EmployeeRepository')
