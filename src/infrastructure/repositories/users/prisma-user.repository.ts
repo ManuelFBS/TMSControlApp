@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { User, UserRole } from '../../../core/entities/users/user.entity';
 import { UserRepository } from '../../../core/repositories/users/user.repository';
+import { UserRole as PrismaUserRole } from '../../../../generated/prisma';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
@@ -19,13 +20,34 @@ export class PrismaUserRepository implements UserRepository {
                 );
         }
 
+        private mapToPrismaRole(role: UserRole): PrismaUserRole {
+                switch (role) {
+                        case UserRole.ADMIN:
+                                return PrismaUserRole.Administrador;
+                        case UserRole.CLIENT:
+                                return PrismaUserRole.Cliente;
+                        case UserRole.DRIVER:
+                                return PrismaUserRole.Conductor;
+                        case UserRole.COMPANY:
+                                return PrismaUserRole.Empresa;
+                        default:
+                                throw new Error('Rol no válido');
+                }
+        }
+
         async create(user: User): Promise<User> {
+                if (user.role === undefined) {
+                        throw new ConflictException(
+                                'El rol del usuario NO puede ser null',
+                        );
+                }
+
                 const created = await this.prisma.user.create({
                         data: {
                                 dni: user.dni,
                                 username: user.username,
                                 password: user.password,
-                                role: user.role,
+                                role: this.mapToPrismaRole(user.role),
                         },
                 });
 
@@ -59,15 +81,19 @@ export class PrismaUserRepository implements UserRepository {
         }
 
         async update(id: number, user: Partial<User>): Promise<User> {
+                const data: any = {};
+
+                if (user.username !== undefined) data.username = user.username;
+                if (user.password !== undefined) data.password = user.password;
+                if (user.role !== undefined)
+                        data.role = this.mapToPrismaRole(user.role);
+
                 const updated = await this.prisma.user.update({
                         where: { id },
-                        data: {
-                                username: user.username,
-                                password: user.password,
-                                role: user.role,
-                        },
+                        data,
                 });
-                return this.toDomain(updated);
+
+                return this.toDomain(data);
         }
 
         async delete(id: number): Promise<void> {

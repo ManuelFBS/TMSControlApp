@@ -32,14 +32,14 @@ model User {
   dni                                        String                           @unique @db.VarChar(20)
   username                            String                           @unique @db.VarChar(15)
   password                             String                           @db.VarChar(120)
-  role                                       Role                              @default(Employee)
+  role                                       UserRole                              @default(Conductor)
   employee                            Employee                    @relation(fields: [dni], references: [dni], onDelete: Cascade, onUpdate: Cascade)
   createdAt                            DateTime                     @default(now())
   updatedAt                           DateTime                    @updatedAt
   sessions                               UserSession[] // <-- Este campo es el lado opuesto a la relación...
 }
 
-enum Role {
+enum UserRole {
   Administrador
   Cliente
   Conductor
