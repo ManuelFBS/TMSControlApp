@@ -67,6 +67,7 @@ model TransportCompany {
   contactName                      String                            @db.VarChar(100)
   contactPhone                     String                            @db.VarChar(25)
   drivers                                 Driver[]
+  vehicles                               Vehicle[]
 }
 
 model Driver {
@@ -76,4 +77,26 @@ model Driver {
   idCompany                          String                            @db.VarChar(30)
   employee                             Employee                    @relation(fields: [dni], references: [dni], onDelete: Cascade, onUpdate: Cascade)
   transportCompany             TransportCompany    @relation(fields: [idCompany], references: [idCompany], onDelete: Cascade, onUpdate: Cascade)
+  vehicle                                  Vehicle?
+}
+
+model Vehicle {
+  id                                           Int                                  @id @default(autoincrement())
+  carLicensePlate                   String                            @unique @db.VarChar(15)
+  typeOfVehicle                     TypeOfVehicle             @default(Tractocamion)
+  brandOfVehicle                   String                            @db.VarChar(30)
+  idCompany                          String                            @db.VarChar(30)
+  transportCompany            TransportCompany     @relation(fields: [idCompany], references: [idCompany], onDelete: Cascade, onUpdate: Cascade)
+  dniDriver                              String                            @unique @db.VarChar(20)
+  driver                                    Driver                            @relation(fields: [dniDriver], references: [dni])
+  createdAt                             DateTime                     @default(now())
+  updatedAt                           DateTime                      @updatedAt
+}
+
+enum TypeOfVehicle {
+  Volqueta_Dtrq
+  Volqueta
+  Carro_Tanque
+  Camion_Sencillo
+  Tractocamion
 }
