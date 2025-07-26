@@ -52,4 +52,33 @@ export class DriverController {
                         }),
                 );
         }
+
+        @Get('driver_byid/:id')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('driver:read')
+        async findOneByID(
+                @Param('id', ParseIntPipe) id: number,
+        ): Promise<DriverResponseDTO> {
+                const driver = await this.driverService.findDriverByID(id);
+
+                return plainToInstance(DriverResponseDTO, driver);
+        }
+
+        @Get('driver_bydni/:dni')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('driver:read')
+        async findOneByDNI(
+                @Param('dni') dni: string,
+        ): Promise<DriverResponseDTO> {
+                const driver = await this.driverService.findDriverByDNI(dni);
+
+                return plainToInstance(DriverResponseDTO, driver);
+        }
+
+        @Delete('driver/delete/:id')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('driver:delete')
+        async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
+                await this.driverService.delete(id);
+        }
 }

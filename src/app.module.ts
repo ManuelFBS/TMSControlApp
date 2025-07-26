@@ -6,6 +6,7 @@ import { AuthModule } from './modules/auth/token/auth.module';
 import { UserModule } from './modules/users/user.module';
 import { UserSessionModule } from './modules/users-sessions/user-session.module';
 import { TransportCompanyModule } from './modules/transport-company/transpor_company.module';
+import { DriverModule } from './modules/drivers/driver.module';
 
 @Module({
         imports: [
@@ -42,6 +43,7 @@ import { TransportCompanyModule } from './modules/transport-company/transpor_com
                 EmployeeModule,
                 UserSessionModule,
                 TransportCompanyModule,
+                DriverModule,
         ],
         //? No se necesitan controllers ni providers aquí si ya están en los módulos...
 })
