@@ -50,7 +50,7 @@ export class VehicleService {
                 const createNewVehicle =
                         await this.vehicleRepository.create(vehicle);
 
-                return vehicle;
+                return createNewVehicle;
         }
 
         async findAllVehicles(): Promise<Vehicle[]> {
