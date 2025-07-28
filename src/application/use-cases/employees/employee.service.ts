@@ -180,7 +180,7 @@ export class EmployeeService {
                 updateEmployeeDTO: UpdateEmployeeDTO,
         ): Promise<Employee> {
                 //* Verificar existencia...
-                if (await this.findByDNI(dni)) {
+                if (!(await this.findByDNI(dni))) {
                         throw new NotFoundException(
                                 `Empleado con DNI ${dni} no encontrado`,
                         );

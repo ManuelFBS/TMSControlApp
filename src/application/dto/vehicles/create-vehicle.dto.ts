@@ -89,6 +89,20 @@ export class CreateVehicleDTO {
                 message: 'El DNI solo debe contener letras y/o números (sin espacios ni caracteres especiales)',
         })
         dniDriver: string;
+
+        @ApiProperty({
+                type: Date,
+                example: '2023-01-01T00:00:00.000Z',
+                description: 'Fecha de creación',
+        })
+        createdAt: Date;
+
+        @ApiProperty({
+                type: Date,
+                example: '2023-01-02T00:00:00.000Z',
+                description: 'Fecha de última actualización',
+        })
+        updatedAt: Date;
 }
 
 export class UpdateVehicleDTO extends PartialType(CreateVehicleDTO) {

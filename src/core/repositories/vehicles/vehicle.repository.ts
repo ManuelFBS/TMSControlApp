@@ -1,9 +1,9 @@
-import { TypeOfVehicle, Vehicle } from '../../entities/vehicles/vehicle.entity';
+import { Vehicle } from '../../entities/vehicles/vehicle.entity';
 
 export abstract class VehicleRepository {
         abstract create(vehicle: Vehicle): Promise<Vehicle>;
         abstract findAll(): Promise<Vehicle[]>;
-        abstract findByType(typeOfVehicle: TypeOfVehicle): Promise<Vehicle[]>;
+        abstract findByType(typeOfVehicle: string): Promise<Vehicle[]>;
         abstract findByBrand(brandOfVehicle: string): Promise<Vehicle[]>;
         abstract findByID(id: number): Promise<Vehicle | null>;
         abstract findByPlate(carLicensePlate: string): Promise<Vehicle | null>;
