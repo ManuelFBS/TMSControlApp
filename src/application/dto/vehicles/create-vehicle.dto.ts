@@ -20,7 +20,6 @@ import { TypeOfVehicle } from '../../../core/entities/vehicles/vehicle.entity';
 export class IsValidTypeOfVehicleConstrain
         implements ValidatorConstraintInterface
 {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         validate(type: any, args: ValidationArguments) {
                 return Object.values(TypeOfVehicle).includes(type);
         }

@@ -38,7 +38,7 @@ export class VehicleController {
                 return plainToInstance(VehicleResponseDTO, vehicle);
         }
 
-        @Get()
+        @Get('all')
         @UseGuards(JWTAuthGuard, PermissionsGuard)
         @Permissions('vehicle:read')
         async findAll(): Promise<VehicleResponseDTO[]> {
@@ -59,5 +59,30 @@ export class VehicleController {
                                 conductor: vehicle.dniDriver,
                         }),
                 );
+        }
+
+        @Get('vehicle_id/:id')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('vehicle:read')
+        async findOne(
+                @Param('id', ParseIntPipe) id: number,
+        ): Promise<VehicleResponseDTO> {
+                const vehicle = await this.vehicleService.findVehicleByID(id);
+
+                return plainToInstance(VehicleResponseDTO, vehicle);
+        }
+
+        @Get('vehicle_brand/:brandOfVehicle')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('vehicle:read')
+        async findManyByBrand(
+                @Param('brandOfVehicle') brandOfVehicle: string,
+        ): Promise<VehicleResponseDTO> {
+                const vehicles =
+                        await this.vehicleService.findVehicleByBrand(
+                                brandOfVehicle,
+                        );
+
+                // return plainToInstance(VehicleResponseDTO, vehicles);
         }
 }

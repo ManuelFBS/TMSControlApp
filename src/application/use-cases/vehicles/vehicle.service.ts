@@ -14,6 +14,7 @@ import {
         CreateVehicleDTO,
         UpdateVehicleDTO,
 } from '../../dto/vehicles/create-vehicle.dto';
+import { SearchVehicleDTO } from '../../dto/vehicles/search-vehicle.dto';
 
 @Injectable()
 export class VehicleService {
@@ -57,28 +58,46 @@ export class VehicleService {
                 return this.vehicleRepository.findAll();
         }
 
-        async findByTypeOfVehicle(typeOfVehicle: string): Promise<Vehicle[]> {
-                //* Validar que el tipo de vehículo sea el correcto...
-                if (
-                        !Object.values(TypeOfVehicle).includes(
-                                typeOfVehicle as TypeOfVehicle,
-                        )
-                ) {
+        async findByTypeOfVehicle(
+                searchTypeVehicleDTO: SearchVehicleDTO,
+        ): Promise<Vehicle[]> {
+                //* Validación de parámetros...
+                const typeVeh =
+                        searchTypeVehicleDTO.typeOfVehicle?.trim() || '';
+                //
+                if (!typeVeh) {
                         throw new BadRequestException(
-                                `Tipo de vehículo inválido: ${typeOfVehicle}`,
+                                'Debe proporcionar al menos un tipo de vehículo.',
                         );
                 }
 
                 const vehicles =
-                        await this.vehicleRepository.findByType(typeOfVehicle);
+                        await this.vehicleRepository.findByType(typeVeh);
+
                 return vehicles;
         }
 
-        async findVehiclesByBrand(brandOfVehicle: string): Promise<Vehicle[]> {
-                const vehicles =
-                        await this.vehicleRepository.findByBrand(
-                                brandOfVehicle,
+        async findVehicleByBrand(
+                searchBrandDTO: SearchVehicleDTO,
+        ): Promise<Vehicle[]> {
+                //* Validación de parámetros...
+                const brandOfVeh = searchBrandDTO.brandOfVehicle?.trim() || '';
+                //
+                if (!brandOfVeh) {
+                        throw new BadRequestException(
+                                'Debe proporcionar al menos una marca de vehículo.',
                         );
+                }
+
+                //* Se comprueba la longitud del valor de 'brandOfVeh' introducido...
+                if (brandOfVeh.length < 3) {
+                        throw new BadRequestException(
+                                'La marca introducida debe tener un mínimo de 3 caracteres.',
+                        );
+                }
+
+                const vehicles =
+                        await this.vehicleRepository.findByBrand(brandOfVeh);
 
                 return vehicles;
         }
@@ -94,15 +113,32 @@ export class VehicleService {
                 return vehicle;
         }
 
-        async findVehicleByCarPlate(carLicensePlate: string): Promise<Vehicle> {
-                const vehicle =
-                        await this.vehicleRepository.findByPlate(
-                                carLicensePlate,
-                        );
+        async findVehicleByCarPlate(
+                searchPlateDTO: SearchVehicleDTO,
+        ): Promise<Vehicle> {
+                //* Validación de parámetros...
+                const carPlate = searchPlateDTO.carLicensePlate?.trim() || '';
 
+                if (!carPlate) {
+                        throw new BadRequestException(
+                                'Debe introducir un valor válido.',
+                        );
+                }
+
+                //* Se verifica que la longitud del valor introducido sea correcta...
+                if (carPlate.length < 5) {
+                        throw new BadRequestException(
+                                'Debe introducir un valor de placa válido de al menos 5 caracteres.',
+                        );
+                }
+
+                const vehicle =
+                        await this.vehicleRepository.findByPlate(carPlate);
+
+                //* Se verifica existencia del vehículo con placa requerida...
                 if (!vehicle) {
                         throw new NotFoundException(
-                                `El vehículo con placas ${carLicensePlate} NO se encuentra registrado.`,
+                                `No existe el vehículo con placas ${carPlate} registrado.`,
                         );
                 }
 
@@ -129,11 +165,7 @@ export class VehicleService {
                 updateVehicleDTO: UpdateVehicleDTO,
         ): Promise<Vehicle> {
                 //* Se verifica existencia del ID...
-                if (await this.findVehicleByID(id)) {
-                        throw new NotFoundException(
-                                `Vehículo con ID ${id} NO existe.`,
-                        );
-                }
+                await this.findVehicleByID(id);
 
                 const updatedVehicle = await this.vehicleRepository.updateByID(
                         id,
@@ -147,12 +179,16 @@ export class VehicleService {
                 carLicensePlate: string,
                 updateVehicleDTO: UpdateVehicleDTO,
         ): Promise<Vehicle> {
-                //* Se verifica existencia del ID...
-                if (await this.findVehicleByCarPlate(carLicensePlate)) {
+                const plate: any = carLicensePlate;
+
+                //* Se verifica existencia de la placa...
+                if (await this.findVehicleByCarPlate(plate)) {
                         throw new NotFoundException(
-                                `Vehículo con placas ${carLicensePlate} NO existe.`,
+                                `Vehículo con placas ${plate} NO existe.`,
                         );
                 }
+
+                await this.findVehicleByCarPlate(plate);
 
                 const updatedVehicle =
                         await this.vehicleRepository.updateByPlate(
@@ -174,14 +210,18 @@ export class VehicleService {
                 return this.vehicleRepository.deleteByID(id);
         }
 
-        async deleteVehicleByCarPlate(carLicensePlate: string): Promise<void> {
+        async deleteVehicleByCarPlate(
+                searchForDeleteDTO: SearchVehicleDTO,
+        ): Promise<void> {
+                const plate: any = searchForDeleteDTO.carLicensePlate;
+
                 //* Se verifica existencia...
-                if (!(await this.findVehicleByCarPlate(carLicensePlate))) {
+                if (!(await this.findVehicleByCarPlate(plate))) {
                         throw new NotFoundException(
-                                `Vehículo con placas ${carLicensePlate} NO encontrado.`,
+                                `Vehículo con placas ${plate} NO encontrado.`,
                         );
                 }
 
-                return this.vehicleRepository.deleteByPlate(carLicensePlate);
+                return this.vehicleRepository.deleteByPlate(plate);
         }
 }
