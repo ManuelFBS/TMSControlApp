@@ -23,7 +23,11 @@ export type Permission =
         | 'client:create'
         | 'client:read'
         | 'client:update'
-        | 'client:delete';
+        | 'client:delete'
+        | 'vehicle:create'
+        | 'vehicle:read'
+        | 'vehicle:update'
+        | 'vehicle:delete';
 
 export const RolePermissions: Record<UserRole, Permission[]> = {
         [UserRole.ADMIN]: [
@@ -50,10 +54,14 @@ export const RolePermissions: Record<UserRole, Permission[]> = {
                 'client:read',
                 'client:update',
                 'client:delete',
+                'vehicle:create',
+                'vehicle:read',
+                'vehicle:update',
+                'vehicle:delete',
         ],
         [UserRole.CLIENT]: ['client:read'],
-        [UserRole.DRIVER]: ['driver:read'],
-        [UserRole.COMPANY]: ['company:read'],
+        [UserRole.DRIVER]: ['driver:read', 'vehicle:read'],
+        [UserRole.COMPANY]: ['company:read', 'vehicle:read'],
 };
 
 export function hasPermission(role: UserRole, permission: Permission): boolean {

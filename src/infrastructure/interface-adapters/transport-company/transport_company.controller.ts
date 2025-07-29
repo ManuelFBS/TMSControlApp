@@ -48,9 +48,9 @@ export class TransportCompanyController {
                 const companies =
                         await this.transportCompanyService.findAllCompanies();
 
-                //* Se ordena por 'username' en forma ascendente...
+                //* Se ordena por 'companyName' en forma ascendente...
                 companies.sort((a, b) =>
-                        a.contactName.localeCompare(b.contactName),
+                        a.companyName.localeCompare(b.companyName),
                 );
 
                 //* Se mapea y (opcionalmente) se transforma a instancia de DTO...
