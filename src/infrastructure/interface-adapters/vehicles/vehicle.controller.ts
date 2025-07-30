@@ -15,10 +15,12 @@ import {
         UpdateVehicleDTO,
         VehicleResponseDTO,
 } from '../../../application/dto/vehicles/create-vehicle.dto';
+import { SearchVehicleDTO } from '../../../application/dto/vehicles/search-vehicle.dto';
 import { JWTAuthGuard } from '../../../auth/guards/jwt-auth.guard';
 import { Permissions } from '../../../core/permissions/permissions.decorator';
 import { PermissionsGuard } from '../../../auth/guards/permissions.guard';
 import { plainToInstance } from 'class-transformer';
+import { retry } from 'rxjs';
 
 @Controller('api/vehicles')
 export class VehicleController {
@@ -63,7 +65,7 @@ export class VehicleController {
 
         @Get('vehicle_id/:id')
         @UseGuards(JWTAuthGuard, PermissionsGuard)
-        @Permissions('vehicle:read')
+        @Permissions('vehicle:create', 'vehicle:read')
         async findOne(
                 @Param('id', ParseIntPipe) id: number,
         ): Promise<VehicleResponseDTO> {
@@ -72,17 +74,45 @@ export class VehicleController {
                 return plainToInstance(VehicleResponseDTO, vehicle);
         }
 
-        @Get('vehicle_brand/:brandOfVehicle')
+        @Get('vehicle/brand')
         @UseGuards(JWTAuthGuard, PermissionsGuard)
-        @Permissions('vehicle:read')
+        @Permissions('vehicle:create', 'vehicle:read')
         async findManyByBrand(
-                @Param('brandOfVehicle') brandOfVehicle: string,
-        ): Promise<VehicleResponseDTO> {
+                @Body() searchBrandDTO: SearchVehicleDTO,
+        ): Promise<VehicleResponseDTO[]> {
                 const vehicles =
                         await this.vehicleService.findVehicleByBrand(
-                                brandOfVehicle,
+                                searchBrandDTO,
                         );
 
-                // return plainToInstance(VehicleResponseDTO, vehicles);
+                return plainToInstance(VehicleResponseDTO, vehicles);
+        }
+
+        @Get('vehicle/type')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('vehicle:create', 'vehicle:read')
+        async findManyByType(
+                @Body() searchTypeOfVehicle: SearchVehicleDTO,
+        ): Promise<VehicleResponseDTO[]> {
+                const vehicles =
+                        await this.vehicleService.findByTypeOfVehicle(
+                                searchTypeOfVehicle,
+                        );
+
+                return plainToInstance(VehicleResponseDTO, vehicles);
+        }
+
+        @Get('vehicle/carplate')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('vehicle:create', 'vehicle:read')
+        async findVehicleByPlate(
+                @Body() searchByPlateDTO: SearchVehicleDTO,
+        ): Promise<VehicleResponseDTO> {
+                const vehicle =
+                        await this.vehicleService.findVehicleByCarPlate(
+                                searchByPlateDTO,
+                        );
+
+                return plainToInstance(VehicleResponseDTO, vehicle);
         }
 }
