@@ -8,6 +8,7 @@ import {
         Delete,
         UseGuards,
         ParseIntPipe,
+        BadRequestException,
 } from '@nestjs/common';
 import { VehicleService } from '../../../application/use-cases/vehicles/vehicle.service';
 import {
@@ -114,5 +115,52 @@ export class VehicleController {
                         );
 
                 return plainToInstance(VehicleResponseDTO, vehicle);
+        }
+
+        @Get('vehicle/assigned')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('vehicle:create', 'vehicle:read')
+        async findByAssignment(
+                @Body() searchByAssignDTO: SearchVehicleDTO,
+        ): Promise<VehicleResponseDTO> {
+                const assigned =
+                        await this.vehicleService.findByAssignmentToDNI(
+                                searchByAssignDTO,
+                        );
+
+                return plainToInstance(VehicleResponseDTO, assigned);
+        }
+
+        @Get('vehicle_id/update')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('vehicle:update')
+        async updateVehicleByID(
+                @Param('id', ParseIntPipe) id: number,
+                @Body() updateVehicleByIdDTO: UpdateVehicleDTO,
+        ): Promise<VehicleResponseDTO> {
+                const updatedVehicle =
+                        await this.vehicleService.updateVehicleByID(
+                                id,
+                                updateVehicleByIdDTO,
+                        );
+
+                return plainToInstance(VehicleResponseDTO, updatedVehicle);
+        }
+
+        @Get('vehicle_plate/update')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('vehicle:update')
+        async updateVehicleByCarPlate(
+                @Body() searchVehicleByPlateDTO: SearchVehicleDTO,
+                updateVehicleByPlate: UpdateVehicleDTO,
+        ): Promise<VehicleResponseDTO> {
+                if (!searchVehicleByPlateDTO.carLicensePlate) {
+                        throw new BadRequestException('');
+                }
+                const updatedVehicle =
+                        await this.vehicleService.updateVehicleByCarPlate(
+                                searchVehicleByPlateDTO.carLicensePlate,
+                                updateVehicleByPlate,
+                        );
         }
 }

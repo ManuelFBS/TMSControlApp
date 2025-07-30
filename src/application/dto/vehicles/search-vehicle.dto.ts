@@ -32,9 +32,9 @@ export class SearchVehicleDTO {
 
         @IsOptional()
         @IsString()
-        carLicensePlate: string;
+        carLicensePlate?: string;
 
         @IsOptional()
         @IsString()
-        dniDriver: string;
+        dniDriver?: string;
 }

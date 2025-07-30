@@ -5,10 +5,7 @@ import {
         ConflictException,
         NotFoundException,
 } from '@nestjs/common';
-import {
-        TypeOfVehicle,
-        Vehicle,
-} from '../../../core/entities/vehicles/vehicle.entity';
+import { Vehicle } from '../../../core/entities/vehicles/vehicle.entity';
 import { VehicleRepository } from '../../../core/repositories/vehicles/vehicle.repository';
 import {
         CreateVehicleDTO,
@@ -145,15 +142,34 @@ export class VehicleService {
                 return vehicle;
         }
 
-        async findByAssignmentToDNI(dniDriver: string): Promise<Vehicle> {
+        async findByAssignmentToDNI(
+                searchByAssignDTO: SearchVehicleDTO,
+        ): Promise<Vehicle> {
+                //* Validación de parámetros...
+                const dniAssign = searchByAssignDTO.dniDriver?.trim() || '';
+
+                if (!dniAssign) {
+                        throw new BadRequestException(
+                                'Debe introducir un DNI válido.',
+                        );
+                }
+
+                //* Se verifica que la longitud del valor introducido sea correcta...
+                if (dniAssign.length < 8) {
+                        throw new BadRequestException(
+                                'Debe introducir un valor de DNI válido de al menos 8 caracteres.',
+                        );
+                }
+
                 const vehicle =
                         await this.vehicleRepository.FindByAssignment(
-                                dniDriver,
+                                dniAssign,
                         );
 
+                //* Se verifica existencia del vehículo con placa requerida...
                 if (!vehicle) {
                         throw new NotFoundException(
-                                `Este conductor con DNI ${dniDriver} NO tiene vehículo asignado.`,
+                                `No existe el vehículo con placas ${dniAssign} registrado.`,
                         );
                 }
 
@@ -175,11 +191,34 @@ export class VehicleService {
                 return updatedVehicle;
         }
 
+        // async updateVehicleByCarPlate(
+        //         carLicensePlate: string,
+        //         updateVehicleDTO: UpdateVehicleDTO,
+        // ): Promise<Vehicle> {
+        //         const plate: any = carLicensePlate;
+
+        //         //* Se verifica existencia de la placa...
+        //         if (await this.findVehicleByCarPlate(plate)) {
+        //                 throw new NotFoundException(
+        //                         `Vehículo con placas ${plate} NO existe.`,
+        //                 );
+        //         }
+
+        //         await this.findVehicleByCarPlate(plate);
+
+        //         const updatedVehicle =
+        //                 await this.vehicleRepository.updateByPlate(
+        //                         carLicensePlate,
+        //                         updateVehicleDTO,
+        //                 );
+
+        //         return updatedVehicle;
+        // }
         async updateVehicleByCarPlate(
-                carLicensePlate: string,
+                carLicensePlateDTO: SearchVehicleDTO,
                 updateVehicleDTO: UpdateVehicleDTO,
         ): Promise<Vehicle> {
-                const plate: any = carLicensePlate;
+                const plate: any = carLicensePlateDTO.carLicensePlate;
 
                 //* Se verifica existencia de la placa...
                 if (await this.findVehicleByCarPlate(plate)) {
@@ -188,11 +227,9 @@ export class VehicleService {
                         );
                 }
 
-                await this.findVehicleByCarPlate(plate);
-
                 const updatedVehicle =
                         await this.vehicleRepository.updateByPlate(
-                                carLicensePlate,
+                                plate,
                                 updateVehicleDTO,
                         );
 
