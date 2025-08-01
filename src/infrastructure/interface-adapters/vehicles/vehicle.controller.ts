@@ -22,7 +22,6 @@ import { JWTAuthGuard } from '../../../auth/guards/jwt-auth.guard';
 import { Permissions } from '../../../core/permissions/permissions.decorator';
 import { PermissionsGuard } from '../../../auth/guards/permissions.guard';
 import { plainToInstance } from 'class-transformer';
-import { NotFoundError, retry } from 'rxjs';
 
 @Controller('api/vehicles')
 export class VehicleController {
