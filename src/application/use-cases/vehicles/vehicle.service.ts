@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {
         Injectable,
         Inject,
@@ -191,29 +192,6 @@ export class VehicleService {
                 return updatedVehicle;
         }
 
-        // async updateVehicleByCarPlate(
-        //         carLicensePlate: string,
-        //         updateVehicleDTO: UpdateVehicleDTO,
-        // ): Promise<Vehicle> {
-        //         const plate: any = carLicensePlate;
-
-        //         //* Se verifica existencia de la placa...
-        //         if (await this.findVehicleByCarPlate(plate)) {
-        //                 throw new NotFoundException(
-        //                         `Vehículo con placas ${plate} NO existe.`,
-        //                 );
-        //         }
-
-        //         await this.findVehicleByCarPlate(plate);
-
-        //         const updatedVehicle =
-        //                 await this.vehicleRepository.updateByPlate(
-        //                         carLicensePlate,
-        //                         updateVehicleDTO,
-        //                 );
-
-        //         return updatedVehicle;
-        // }
         async updateVehicleByCarPlate(
                 carLicensePlateDTO: SearchVehicleDTO,
                 updateVehicleDTO: UpdateVehicleDTO,

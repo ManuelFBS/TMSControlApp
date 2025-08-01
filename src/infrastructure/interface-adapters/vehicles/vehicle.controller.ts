@@ -9,6 +9,7 @@ import {
         UseGuards,
         ParseIntPipe,
         BadRequestException,
+        NotFoundException,
 } from '@nestjs/common';
 import { VehicleService } from '../../../application/use-cases/vehicles/vehicle.service';
 import {
@@ -21,7 +22,7 @@ import { JWTAuthGuard } from '../../../auth/guards/jwt-auth.guard';
 import { Permissions } from '../../../core/permissions/permissions.decorator';
 import { PermissionsGuard } from '../../../auth/guards/permissions.guard';
 import { plainToInstance } from 'class-transformer';
-import { retry } from 'rxjs';
+import { NotFoundError, retry } from 'rxjs';
 
 @Controller('api/vehicles')
 export class VehicleController {
@@ -131,7 +132,7 @@ export class VehicleController {
                 return plainToInstance(VehicleResponseDTO, assigned);
         }
 
-        @Get('vehicle_id/update')
+        @Put('vehicle_id/update')
         @UseGuards(JWTAuthGuard, PermissionsGuard)
         @Permissions('vehicle:update')
         async updateVehicleByID(
@@ -147,20 +148,62 @@ export class VehicleController {
                 return plainToInstance(VehicleResponseDTO, updatedVehicle);
         }
 
-        @Get('vehicle_plate/update')
+        @Put('vehicle_plate/update')
         @UseGuards(JWTAuthGuard, PermissionsGuard)
         @Permissions('vehicle:update')
         async updateVehicleByCarPlate(
-                @Body() searchVehicleByPlateDTO: SearchVehicleDTO,
-                updateVehicleByPlate: UpdateVehicleDTO,
+                @Body()
+                updateData: {
+                        carLicensePlate: string;
+                        updateData: UpdateVehicleDTO;
+                },
         ): Promise<VehicleResponseDTO> {
-                if (!searchVehicleByPlateDTO.carLicensePlate) {
-                        throw new BadRequestException('');
+                if (!updateData.carLicensePlate) {
+                        throw new BadRequestException(
+                                'La placa del vehículo es requerida.',
+                        );
                 }
+
+                //* Se crea un SearchVehicleDTO con la placa...
+                const searchDTO: SearchVehicleDTO = {
+                        carLicensePlate: updateData.carLicensePlate,
+                };
+
                 const updatedVehicle =
                         await this.vehicleService.updateVehicleByCarPlate(
-                                searchVehicleByPlateDTO.carLicensePlate,
-                                updateVehicleByPlate,
+                                searchDTO,
+                                updateData.updateData,
                         );
+
+                return plainToInstance(VehicleResponseDTO, updatedVehicle);
+        }
+
+        @Delete('vehicle_id/delete')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('vehicle:delete')
+        async deleteVehicleByID(
+                @Param('id', ParseIntPipe) id: number,
+        ): Promise<void> {
+                await this.vehicleService.deleteVehicleByID(id);
+        }
+
+        @Delete('vehicle_plate/delete')
+        @UseGuards(JWTAuthGuard, PermissionsGuard)
+        @Permissions('vehicle:delete')
+        async deleteVehicleByCarPlate(
+                @Body() searchByPlateDTO: SearchVehicleDTO,
+        ): Promise<void> {
+                //* Se crea un SearchVehicleDTO con la placa...
+                const searchDTO: SearchVehicleDTO = {
+                        carLicensePlate: searchByPlateDTO.carLicensePlate,
+                };
+
+                if (!(await this.findVehicleByPlate(searchDTO))) {
+                        throw new NotFoundException(
+                                `El vehículo con placas ${searchByPlateDTO.typeOfVehicle} NO se encuentra registrado.`,
+                        );
+                }
+
+                await this.vehicleService.deleteVehicleByCarPlate(searchDTO);
         }
 }
